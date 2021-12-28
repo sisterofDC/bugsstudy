@@ -28,4 +28,4 @@ class Client(object):
 
 if __name__ == "__main__":
     udpClient = Client()
-    udpClient.tcpclient()
+    udpClient.udpclient()
