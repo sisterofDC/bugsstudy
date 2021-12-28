@@ -1,17 +1,19 @@
 import socket
 
-s_UDP = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-host = '0.0.0.0'
-port = 8080
-address = (host, port)
+
+class UdpClient(object):
+    def tcpclient(self):
+        clientSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        while True:
+            data = input()
+            clientSock.sendto(data.encode('utf-8'), ('localhost', 9527))
+            recvData = clientSock.recvfrom(1024)
+            print(recvData)
+            if data == '0':
+                break
+        clientSock.close()
 
 
-def recv_meg():
-    s_UDP.bind(address=address)
-    while True:
-        data = s_UDP.recvfrom(bufsize=1024)
-        print(data)
-
-
-if __name__ == '__main__':
-    recv_meg()
+if __name__ == "__main__":
+    udpClient = UdpClient()
+    udpClient.tcpclient()

@@ -1,20 +1,20 @@
 import socket
 
-# UDP
-s_UDP = socket.socket(socket.AF_IRDA, socket.SOCK_DGRAM)
-host = '0.0.0.0'
-port = 8080
-address = (host, port)
+
+class UdpServer(object):
+    def tcpServer(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind(('', 9527))  # 绑定同一个域名下的所有机器
+        while True:
+            revcData, (remoteHost, remotePort) = sock.recvfrom(1024)
+            print("[%s:%s] connect" % (remoteHost, remotePort),revcData)  # 接收客户端的ip, port
+            data = input()
+            if data == '0':
+                break
+            sock.sendto(data.encode('utf-8'), (remoteHost, remotePort))
+        sock.close()
 
 
-def send_meg():
-    while True:
-        data = input()
-        if data == '0':
-            break
-        s_UDP.sendto(data=data.encode("utf-8"), address=('0.0.0.0', 8080))
-    s_UDP.close()
-
-
-if __name__ == '__main__':
-    send_meg()
+if __name__ == "__main__":
+    udpServer = UdpServer()
+    udpServer.tcpServer()
