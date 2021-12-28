@@ -1,6 +1,7 @@
 import threading
 import time
 
+
 # threading的所有知识点
 # join 的使用
 # 线程的阻塞
@@ -27,6 +28,7 @@ def test_function(arg):
     #     t.join()
     #     在线程中添加join可以实现简单的顺序执行
 
+
 # lock
 # 原始锁是一个在锁定时不属于特定线程的同步基元组件。
 # 原始锁处于 "锁定" 或者 "非锁定" 两种状态之一。它被创建时为非锁定状态。它有两个基本方法， acquire() 和 release() 。当状态为非锁定时， acquire() 将状态改为 锁定 并立即返回。当状态是锁定时，
@@ -34,22 +36,25 @@ def test_function(arg):
 # 当多个线程在 acquire() 等待状态转变为未锁定被阻塞，然后 release() 重置状态为未锁定时，只有一个线程能继续执行；至于哪个等待线程继续执行没有定义，并且会根据实现而不同。
 # 所有方法的执行都是原子性的。
 
-number=0
-def lock_test_function(name,lock):
+number = 0
+
+
+def lock_test_function(name, lock):
     lock.acquire()
     for i in range(5):
         global number
         number = number + 1
-        print(number, "当前是",name, threading.current_thread().name)
+        print(number, "当前是", name, threading.current_thread().name)
     print(lock.locked())
     lock.release()
 
-def lock_test_function_two(name,lock):
+
+def lock_test_function_two(name, lock):
     lock.acquire()
     for i in range(5):
         global number
         number = number - 1
-        print(number,"当前是",name,threading.current_thread().name)
+        print(number, "当前是", name, threading.current_thread().name)
     lock.release()
 
 
@@ -64,6 +69,21 @@ def lock_test_function_two(name,lock):
 
 goods = 50
 # Rlock 可以重载的锁()
-# Condition
 
 
+# 最后一个event
+event = threading.Event()
+
+def event_function(name):
+    for i in range(10):
+        print(i)
+        if i > 5:
+            event.wait()
+
+# 需要设置set后 ，i 才会继续加
+
+if __name__ == '__main__':
+    a = threading.Thread(target=event_function,args=("a",))
+    a.start()
+    time.sleep(3)
+    event.set()
